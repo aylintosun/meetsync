@@ -533,6 +533,34 @@ textarea:disabled {
   flex: 0 0 auto;
 }
 
+.add-note-button {
+  min-height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 12px;
+  background: #7c3aed;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.add-note-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.add-note-button:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.day-card.selected-day {
+  box-shadow: 0 0 0 3px #7c3aed;
+}
+
 @media (max-width: 760px) {
   .calendar-top,
   .setup-row {

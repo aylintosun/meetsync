@@ -8,6 +8,8 @@ type CalendarGridProps = {
   currentYear: number;
   currentMonth: number;
   selectedColor: string;
+  selectedDay: number | null;
+  onSelectDay: (day: number) => void;
   onPaintDay: (day: number, action: PaintAction) => void;
 };
 
@@ -17,6 +19,8 @@ function CalendarGrid({
   currentYear,
   currentMonth,
   selectedColor,
+  selectedDay,
+  onSelectDay,
   onPaintDay,
 }: CalendarGridProps) {
 
@@ -157,7 +161,7 @@ function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
                 }
             }}
             >
-                
+
       {days.map((day, index) => {
         if (day === null) {
           return (
@@ -180,9 +184,11 @@ function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
           <button
             key={dateKey}
             type="button"
-            className="day-card"
+            className={`day-card ${selectedDay === day ? "selected-day" : ""}`}
             data-calendar-day={day}
             onPointerDown={(event) => {
+                onSelectDay(day);
+                
                 if (!selectedColor) return;
 
                 event.preventDefault();

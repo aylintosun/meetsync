@@ -21,6 +21,7 @@ function App() {
   const [selectedColor, setSelectedColor] = useState("");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
 
   const [note, setNote] = useState("");
   const [selectedNoteColor, setSelectedNoteColor] = useState("");
@@ -87,6 +88,19 @@ function App() {
         2,
         "0"
       )}-${String(day).padStart(2, "0")}`;
+    }
+
+    function handleOpenNotesPanel() {
+      if (selectedDay === null) return;
+
+      const dateKey = getDateKey(selectedDay);
+      const colorsForDay = markedDays[dateKey] || [];
+      const firstColor = colorsForDay[0] || "";
+
+      setSelectedNoteColor(firstColor);
+      setNote(firstColor ? notes[dateKey]?.[firstColor] || "" : "");
+      setIsEditingNote(false);
+      setIsDetailsPanelOpen(true);
     }
 
 type PaintAction = "add" | "remove";
@@ -156,7 +170,7 @@ function handlePaintDay(day: number, action: PaintAction) {
         },
       }));
 
-      setSelectedDay(null);
+      setIsDetailsPanelOpen(false);
       setNote("");
       setSelectedNoteColor("");
     }
@@ -214,6 +228,15 @@ return (
             <p className="app-label">📅 Calendar</p>
             <h1>MeetSync</h1>
           </div>
+          <button
+              type="button"
+              className="add-note-button"
+              onClick={handleOpenNotesPanel}
+              disabled={selectedDay === null}
+            >
+              {selectedDay === null ? "Select a day" : "✎ Add note"}
+            </button>
+
         </header>
 
         <section className="setup-row">
@@ -246,11 +269,13 @@ return (
           currentYear={currentYear}
           currentMonth={currentMonth}
           selectedColor={selectedColor}
+          selectedDay={selectedDay}
+          onSelectDay={setSelectedDay}
           onPaintDay={handlePaintDay}
         />
       </section>
 
-      {selectedDay !== null && (
+      {selectedDay !== null && isDetailsPanelOpen && (
         <DayDetailsPanel
           selectedDay={selectedDay}
           monthName={monthName}
@@ -266,7 +291,7 @@ return (
           onSave={handleSaveNote}
           onDelete={handleDeleteNote}
           onClose={() => {
-            setSelectedDay(null);
+            setIsDetailsPanelOpen(false);
             setNote("");
             setSelectedNoteColor("");
             setIsEditingNote(false);
