@@ -24,6 +24,7 @@ function App() {
 
   const [note, setNote] = useState("");
   const [selectedNoteColor, setSelectedNoteColor] = useState("");
+  const [isEditingNote, setIsEditingNote] = useState(false);
 
   const [notes, setNotes] = useState<Record<string, Record<string, string>>>(() => {
     const savedNotes = localStorage.getItem("notes");
@@ -90,6 +91,7 @@ function App() {
 
     function handleDayClick(day: number) {
         setSelectedDay(day);
+        setIsEditingNote(false);
 
         const dateKey = getDateKey(day);
         const colorsForDay = markedDays[dateKey] || [];
@@ -145,6 +147,50 @@ function App() {
       setSelectedNoteColor("");
     }
 
+    function handleStartEditing() {
+  if (!selectedNoteColor && selectedDay !== null) {
+    const dateKey = getDateKey(selectedDay);
+    const firstColor = (markedDays[dateKey] || [])[0] || "";
+    setSelectedNoteColor(firstColor);
+    setNote(firstColor ? notes[dateKey]?.[firstColor] || "" : "");
+  }
+
+  setIsEditingNote(true);
+}
+
+function handleCancelEditing() {
+  if (selectedDay === null) return;
+
+  const dateKey = getDateKey(selectedDay);
+  setNote(selectedNoteColor ? notes[dateKey]?.[selectedNoteColor] || "" : "");
+  setIsEditingNote(false);
+}
+
+function handleDeleteNote() {
+  if (selectedDay === null || !selectedNoteColor) return;
+
+  const dateKey = getDateKey(selectedDay);
+
+  setNotes((prev) => {
+    const dayNotes = { ...(prev[dateKey] || {}) };
+    delete dayNotes[selectedNoteColor];
+
+    if (Object.keys(dayNotes).length === 0) {
+      const next = { ...prev };
+      delete next[dateKey];
+      return next;
+    }
+
+    return {
+      ...prev,
+      [dateKey]: dayNotes,
+    };
+  });
+
+  setNote("");
+  setIsEditingNote(false);
+}
+
 return (
   <main className="app">
     <div className="app-layout"> 
@@ -197,13 +243,18 @@ return (
           selectedNoteColor={selectedNoteColor}
           note={note}
           notesForDay={notes[getDateKey(selectedDay)] || {}}
+          isEditingNote={isEditingNote}
           onNoteColorSelect={handleNoteColorSelect}
           onNoteChange={setNote}
+          onStartEditing={handleStartEditing}
+          onCancelEditing={handleCancelEditing}
           onSave={handleSaveNote}
+          onDelete={handleDeleteNote}
           onClose={() => {
             setSelectedDay(null);
             setNote("");
             setSelectedNoteColor("");
+            setIsEditingNote(false);
           }}
         />
       )}

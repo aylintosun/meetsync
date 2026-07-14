@@ -318,36 +318,139 @@ textarea {
     0 0 0 5px #6b7280;
 }
 
-@media (max-width: 760px) {
-  .calendar-top,
-  .setup-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .weekdays {
-    display: none;
-  }
-
-  .days-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .details-panel {
-    left: 20px;
-    right: 20px;
-    top: 20px;
-    width: auto;
-  }
-
-.month-title button {
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  display: grid;
-  place-items: center;
+.selected-color-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
+.selected-color-top p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.edit-note-button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dddfea;
+  background: #ffffff;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #374151;
+}
+
+.edit-note-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.panel-color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.panel-color-button {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+  flex: 0 0 30px;
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px #d8d8df;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.panel-color-button.selected {
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 3px white,
+    0 0 0 5px #6b7280;
+}
+
+textarea {
+  background: #ffffff;
+  color: #111827;
+}
+
+textarea:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.empty-message {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.saved-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.saved-note-card {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 18px 16px;
+  text-align: left;
+  cursor: pointer;
+  color: #2f3340;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.saved-note-card:hover {
+  transform: translateY(-1px);
+}
+
+.saved-note-card.selected {
+  box-shadow: 0 0 0 2px #6b7280 inset;
+}
+
+.saved-note-card-text {
+  display: block;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.panel-action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.delete-button,
+.cancel-button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.delete-button {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.cancel-button {
+  background: #eef0f4;
+  color: #374151;
+}
 textarea {
   background: #ffffff;
   color: #111827;
@@ -393,4 +496,33 @@ textarea:disabled {
   flex: 0 0 auto;
 }
 
+@media (max-width: 760px) {
+  .calendar-top,
+  .setup-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .weekdays {
+    display: none;
+  }
+
+  .days-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .details-panel {
+    left: 20px;
+    right: 20px;
+    top: 20px;
+    width: auto;
+  }
+
+  .month-title button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+  }
 }
