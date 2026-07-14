@@ -83,7 +83,7 @@ const stripeLayout = createStripeLayout();
         }
 
         const dateKey = getDateKey(day);
-        const colorsForDay = markedDays[dateKey] || [
+        const colorsForDay = stripeLayout[dateKey] || [
             null,
             null,
             null,
