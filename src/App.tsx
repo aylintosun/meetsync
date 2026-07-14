@@ -181,12 +181,29 @@ function handlePaintDay(day: number, action: PaintAction) {
 
   const dateKey = getDateKey(day);
 
-  setMarkedDays((prev) => {
-    const currentColors = prev[dateKey] || [];
+  if (action === "remove") {
+    setNotes((previousNotes) => {
+      const updatedNotes = { ...previousNotes };
+      const dayNotes = { ...(updatedNotes[dateKey] || {}) };
+
+      delete dayNotes[selectedColor];
+
+      if (Object.keys(dayNotes).length === 0) {
+        delete updatedNotes[dateKey];
+      } else {
+        updatedNotes[dateKey] = dayNotes;
+      }
+
+      return updatedNotes;
+    });
+  }
+
+  setMarkedDays((previousMarkedDays) => {
+    const currentColors = previousMarkedDays[dateKey] || [];
 
     if (action === "remove") {
       if (!currentColors.includes(selectedColor)) {
-        return prev;
+        return previousMarkedDays;
       }
 
       const updatedColors = currentColors.filter(
@@ -194,73 +211,76 @@ function handlePaintDay(day: number, action: PaintAction) {
       );
 
       if (updatedColors.length === 0) {
-        const updatedDays = { ...prev };
+        const updatedDays = { ...previousMarkedDays };
         delete updatedDays[dateKey];
         return updatedDays;
       }
 
       return {
-        ...prev,
+        ...previousMarkedDays,
         [dateKey]: updatedColors,
       };
     }
 
     if (currentColors.includes(selectedColor)) {
-      return prev;
+      return previousMarkedDays;
     }
 
     if (currentColors.length >= 4) {
-      return prev;
+      return previousMarkedDays;
     }
 
     return {
-      ...prev,
+      ...previousMarkedDays,
       [dateKey]: [...currentColors, selectedColor],
     };
   });
 }
 
-    function handleNoteColorSelect(color: string) {
-      if (selectedDay === null) return;
+function handleNoteColorSelect(color: string) {
+  if (selectedDay === null) return;
 
-      setSelectedNoteColor(color);
-      setNote(getConnectedNote(selectedDay, color));
-      setIsEditingNote(false);
-    }
+  setSelectedNoteColor(color);
+  setNote(getConnectedNote(selectedDay, color));
+  setIsEditingNote(false);
+}
 
-    function handleSaveNote() {
-        if (selectedDay === null || !selectedNoteColor) return;
+function handleSaveNote() {
+  if (selectedDay === null || !selectedNoteColor) return;
 
-        const connectedDateKeys = getConnectedDateKeys(
-          selectedDay,
-          selectedNoteColor,
-        );
+  const connectedDateKeys = getConnectedDateKeys(
+    selectedDay,
+    selectedNoteColor,
+  );
 
-        setNotes((prev) => {
-          const updatedNotes = { ...prev };
+  setNotes((previousNotes) => {
+    const updatedNotes = { ...previousNotes };
 
-          connectedDateKeys.forEach((dateKey) => {
-            updatedNotes[dateKey] = {
-              ...(updatedNotes[dateKey] || {}),
-              [selectedNoteColor]: note,
-            };
-          });
+    connectedDateKeys.forEach((dateKey) => {
+      updatedNotes[dateKey] = {
+        ...(updatedNotes[dateKey] || {}),
+        [selectedNoteColor]: note,
+      };
+    });
 
-          return updatedNotes;
-        });
+    return updatedNotes;
+  });
 
-        setIsEditingNote(false);
-        setIsDetailsPanelOpen(false);
-        setNote("");
-        setSelectedNoteColor("");
-      }
+  setIsEditingNote(false);
+  setIsDetailsPanelOpen(false);
+  setNote("");
+  setSelectedNoteColor("");
+}
 
-    function handleStartEditing() {
+function handleStartEditing() {
   if (!selectedNoteColor && selectedDay !== null) {
     const dateKey = getDateKey(selectedDay);
     const firstColor = (markedDays[dateKey] || [])[0] || "";
+
     setSelectedNoteColor(firstColor);
-    setNote(firstColor ? notes[dateKey]?.[firstColor] || "" : "");
+    setNote(
+      firstColor ? getConnectedNote(selectedDay, firstColor) : "",
+    );
   }
 
   setIsEditingNote(true);
@@ -269,40 +289,44 @@ function handlePaintDay(day: number, action: PaintAction) {
 function handleCancelEditing() {
   if (selectedDay === null) return;
 
-  const dateKey = getDateKey(selectedDay);
-  setNote(selectedNoteColor ? notes[dateKey]?.[selectedNoteColor] || "" : "");
+  setNote(
+    selectedNoteColor
+      ? getConnectedNote(selectedDay, selectedNoteColor)
+      : "",
+  );
+
   setIsEditingNote(false);
 }
 
 function handleDeleteNote() {
-      if (selectedDay === null || !selectedNoteColor) return;
+  if (selectedDay === null || !selectedNoteColor) return;
 
-      const connectedDateKeys = getConnectedDateKeys(
-        selectedDay,
-        selectedNoteColor,
-      );
+  const connectedDateKeys = getConnectedDateKeys(
+    selectedDay,
+    selectedNoteColor,
+  );
 
-      setNotes((prev) => {
-        const updatedNotes = { ...prev };
+  setNotes((previousNotes) => {
+    const updatedNotes = { ...previousNotes };
 
-        connectedDateKeys.forEach((dateKey) => {
-          const dayNotes = { ...(updatedNotes[dateKey] || {}) };
+    connectedDateKeys.forEach((dateKey) => {
+      const dayNotes = { ...(updatedNotes[dateKey] || {}) };
 
-          delete dayNotes[selectedNoteColor];
+      delete dayNotes[selectedNoteColor];
 
-          if (Object.keys(dayNotes).length === 0) {
-            delete updatedNotes[dateKey];
-          } else {
-            updatedNotes[dateKey] = dayNotes;
-          }
-        });
+      if (Object.keys(dayNotes).length === 0) {
+        delete updatedNotes[dateKey];
+      } else {
+        updatedNotes[dateKey] = dayNotes;
+      }
+    });
 
-        return updatedNotes;
-      });
+    return updatedNotes;
+  });
 
-      setNote("");
-      setIsEditingNote(false);
-    }
+  setNote("");
+  setIsEditingNote(false);
+}
 
 return (
   <main className="app">
