@@ -283,6 +283,41 @@ textarea {
   cursor: pointer;
 }
 
+.panel-color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.panel-color-button {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+  flex: 0 0 30px;
+
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px #d8d8df;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.panel-color-button:hover {
+  transform: scale(1.06);
+}
+
+.panel-color-button.selected {
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 3px white,
+    0 0 0 5px #6b7280;
+}
+
 @media (max-width: 760px) {
   .calendar-top,
   .setup-row {
@@ -304,50 +339,6 @@ textarea {
     top: 20px;
     width: auto;
   }
-
-  .panel-color-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.panel-color-button {
-  width: 30px;
-  height: 30px;
-  border: 2px solid white;
-  border-radius: 9px;
-  cursor: pointer;
-  box-shadow: 0 0 0 1px #d8d8df;
-}
-
-.panel-color-button.selected {
-  transform: scale(1.12);
-  box-shadow:
-    0 0 0 3px white,
-    0 0 0 5px #6b7280;
-}
-.panel-color-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.panel-color-button {
-  width: 30px;
-  height: 30px;
-  border: 2px solid white;
-  border-radius: 9px;
-  cursor: pointer;
-  box-shadow: 0 0 0 1px #d8d8df;
-  flex: 0 0 auto;
-}
-
-.panel-color-button.selected {
-  transform: scale(1.12);
-  box-shadow:
-    0 0 0 3px white,
-    0 0 0 5px #6b7280;
-}
 
 .month-title button {
   width: 42px;
