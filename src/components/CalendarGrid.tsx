@@ -20,6 +20,56 @@ function CalendarGrid({
     )}-${String(day).padStart(2, "0")}`;
   }
 
+  function createStripeLayout() {
+  const layout: Record<string, (string | null)[]> = {};
+
+  let previousSlots: (string | null)[] = [null, null, null, null];
+
+  days.forEach((day, index) => {
+    if (index % 7 === 0) {
+      previousSlots = [null, null, null, null];
+    }
+
+    if (day === null) {
+      return;
+    }
+
+    const dateKey = getDateKey(day);
+    const dayColors = markedDays[dateKey] || [];
+
+    const currentSlots: (string | null)[] = [null, null, null, null];
+
+    // Önce bir önceki günden devam eden renkleri aynı satırda tut.
+    previousSlots.forEach((color, slotIndex) => {
+      if (color && dayColors.includes(color)) {
+        currentSlots[slotIndex] = color;
+      }
+    });
+
+    // Yeni başlayan renkleri boş satırlara yerleştir.
+    dayColors.forEach((color) => {
+      if (currentSlots.includes(color)) {
+        return;
+      }
+
+      const emptySlotIndex = currentSlots.findIndex(
+        (slotColor) => slotColor === null,
+      );
+
+      if (emptySlotIndex !== -1) {
+        currentSlots[emptySlotIndex] = color;
+      }
+    });
+
+    layout[dateKey] = currentSlots;
+    previousSlots = currentSlots;
+  });
+
+  return layout;
+}
+
+const stripeLayout = createStripeLayout();
+
   return (
     <div className="days-grid">
       {days.map((day, index) => {
@@ -33,7 +83,12 @@ function CalendarGrid({
         }
 
         const dateKey = getDateKey(day);
-        const colorsForDay = markedDays[dateKey] || [];
+        const colorsForDay = markedDays[dateKey] || [
+            null,
+            null,
+            null,
+            null,
+            ];
 
         return (
           <button
@@ -66,12 +121,12 @@ function CalendarGrid({
                 const connectsToPrevious =
                   Boolean(color) &&
                   previousDay !== null &&
-                  markedDays[previousDateKey]?.[stripeIndex] === color;
+                  stripeLayout[previousDateKey]?.[stripeIndex] === color;
 
                 const connectsToNext =
                   Boolean(color) &&
                   nextDay !== null &&
-                  markedDays[nextDateKey]?.[stripeIndex] === color;
+                  stripeLayout[nextDateKey]?.[stripeIndex] === color;
 
                 const connectionClasses = [
                   color ? "filled-stripe" : "",

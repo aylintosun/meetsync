@@ -162,7 +162,7 @@ h1 {
 
 .day-card:hover {
   background: #f0f0f3;
-  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(47, 51, 64, 0.08);
 }
 
 .empty-day {
