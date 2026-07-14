@@ -29,16 +29,20 @@ function DayDetailsPanel({
         <h2>
           {selectedDay} {monthName}
         </h2>
-        <button onClick={onClose} className="close-button">
+        <button   
+        onClick={onClose}
+  className="close-button"
+  aria-label="Close panel"
+>
           ×
         </button>
       </div>
 
       <div className="selected-color-box">
-        <p>Bu gündeki renkler</p>
+        <p>Colors assigned to this day</p>
 
         {availableColors.length === 0 ? (
-          <p className="empty-message">Önce takvimden bu güne bir renk ekle.</p>
+          <p className="empty-message">Add a color to this day from the calendar first.</p>
         ) : (
           <div className="panel-color-options">
             {availableColors.map((color) => (
@@ -49,18 +53,18 @@ function DayDetailsPanel({
                 }`}
                 style={{ backgroundColor: color }}
                 onClick={() => onNoteColorSelect(color)}
-                aria-label="Not rengi seç"
+                aria-label="Select note color"
               />
             ))}
           </div>
         )}
       </div>
 
-      <label className="note-label">Not</label>
+      <label className="note-label">Note</label>
       <textarea
         value={note}
         onChange={(event) => onNoteChange(event.target.value)}
-        placeholder="Not yaz..."
+        placeholder="Write a note..."
         maxLength={200}
         disabled={!selectedNoteColor}
       />
@@ -69,7 +73,7 @@ function DayDetailsPanel({
 
       {Object.entries(notesForDay).length > 0 && (
         <div className="saved-notes">
-          <p>Kayıtlı notlar</p>
+          <p>Saved notes</p>
           {Object.entries(notesForDay).map(([color, savedNote]) => (
             <div key={color} className="saved-note">
               <span
@@ -87,7 +91,7 @@ function DayDetailsPanel({
         onClick={onSave}
         disabled={!selectedNoteColor}
       >
-        Kaydet
+        Save
       </button>
     </aside>
   );

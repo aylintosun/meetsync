@@ -48,7 +48,7 @@ function App() {
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
 
-  const monthName = currentDate.toLocaleString("tr-TR", {
+  const monthName = currentDate.toLocaleString("en-US", {
     month: "long",
     year: "numeric",
   });
@@ -171,13 +171,13 @@ return (
         </section>
 
         <div className="weekdays">
-          <span>Pzt</span>
-          <span>Sal</span>
-          <span>Çar</span>
-          <span>Per</span>
-          <span>Cum</span>
-          <span>Cmt</span>
-          <span>Paz</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+          <span>Sun</span>
         </div>
 
         <CalendarGrid
