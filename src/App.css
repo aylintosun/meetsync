@@ -558,7 +558,10 @@ textarea:disabled {
 }
 
 .day-card.selected-day {
-  box-shadow: 0 0 0 3px #7c3aed;
+  background: #f7f5f8;
+  box-shadow:
+    0 0 0 2px #aca0bd,
+    0 5px 14px rgba(172, 160, 189, 0.18);
 }
 
 @media (max-width: 760px) {
