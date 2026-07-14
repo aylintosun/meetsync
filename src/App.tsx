@@ -89,37 +89,51 @@ function App() {
       )}-${String(day).padStart(2, "0")}`;
     }
 
-    function handleDayClick(day: number) {
-        setSelectedDay(day);
-        setIsEditingNote(false);
+type PaintAction = "add" | "remove";
 
-        const dateKey = getDateKey(day);
-        const colorsForDay = markedDays[dateKey] || [];
-        const firstColor = colorsForDay[0] || "";
+function handlePaintDay(day: number, action: PaintAction) {
+  if (!selectedColor) return;
 
-        setSelectedNoteColor(firstColor);
-        setNote(firstColor ? notes[dateKey]?.[firstColor] || "" : "");
+  const dateKey = getDateKey(day);
 
-        if (!selectedColor) return;
+  setMarkedDays((prev) => {
+    const currentColors = prev[dateKey] || [];
 
-        setMarkedDays((prev) => {
-        const currentColors = prev[dateKey] || [];
+    if (action === "remove") {
+      if (!currentColors.includes(selectedColor)) {
+        return prev;
+      }
 
-        if (currentColors.includes(selectedColor)) {
-          return {
-            ...prev,
-            [dateKey]: currentColors.filter((color) => color !== selectedColor),
-          };
-        }
+      const updatedColors = currentColors.filter(
+        (color) => color !== selectedColor,
+      );
 
-        if (currentColors.length >= 4) return prev;
+      if (updatedColors.length === 0) {
+        const updatedDays = { ...prev };
+        delete updatedDays[dateKey];
+        return updatedDays;
+      }
 
-        return {
-          ...prev,
-          [dateKey]: [...currentColors, selectedColor],
-        };
-      });
+      return {
+        ...prev,
+        [dateKey]: updatedColors,
+      };
     }
+
+    if (currentColors.includes(selectedColor)) {
+      return prev;
+    }
+
+    if (currentColors.length >= 4) {
+      return prev;
+    }
+
+    return {
+      ...prev,
+      [dateKey]: [...currentColors, selectedColor],
+    };
+  });
+}
 
     function handleNoteColorSelect(color: string) {
       if (selectedDay === null) return;
@@ -231,7 +245,8 @@ return (
           markedDays={markedDays}
           currentYear={currentYear}
           currentMonth={currentMonth}
-          onDayClick={handleDayClick}
+          selectedColor={selectedColor}
+          onPaintDay={handlePaintDay}
         />
       </section>
 
