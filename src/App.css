@@ -184,9 +184,36 @@ h1 {
 }
 
 .empty-stripe {
+  position: relative;
+  z-index: 1;
   height: 13px;
   border-radius: 999px;
   background: #f0f0f3;
+}
+
+.filled-stripe {
+  transition:
+    width 0.15s ease,
+    margin 0.15s ease;
+}
+
+.filled-stripe.connected-left {
+  width: calc(100% + 15px);
+  margin-left: -15px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.filled-stripe.connected-right {
+  width: calc(100% + 15px);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.filled-stripe.connected-left.connected-right {
+  width: calc(100% + 30px);
+  margin-left: -15px;
+  border-radius: 0;
 }
 
 .details-panel {
