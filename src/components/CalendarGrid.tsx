@@ -1,5 +1,7 @@
 import { useRef } from "react";
 
+type PaintAction = "add" | "remove";
+
 type CalendarGridProps = {
   days: (number | null)[];
   markedDays: Record<string, string[]>;
@@ -132,16 +134,30 @@ function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
 }
 
   return (
-    <div   className={`days-grid ${isPaintingRef.current ? "is-painting" : ""}`}
-  onPointerMove={handlePointerMove}
-  onPointerUp={stopPainting}
-  onPointerCancel={stopPainting}
-  onPointerLeave={(event) => {
-    if (event.pointerType === "mouse") {
-      stopPainting();
-    }
-  }}
->
+    <div className="days-grid"
+            onPointerMove={handlePointerMove}
+            onPointerUp={(event) => {
+                stopPainting();
+
+                const capturedElement = event.target as HTMLElement;
+
+                if (
+                capturedElement.hasPointerCapture?.(event.pointerId)
+                ) {
+                capturedElement.releasePointerCapture(event.pointerId);
+                }
+            }}
+            onPointerCancel={stopPainting}
+            onPointerLeave={(event) => {
+                if (
+                event.pointerType === "mouse" &&
+                event.buttons === 0
+                ) {
+                stopPainting();
+                }
+            }}
+            >
+                
       {days.map((day, index) => {
         if (day === null) {
           return (
@@ -166,15 +182,17 @@ function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
             type="button"
             className="day-card"
             data-calendar-day={day}
-              onPointerDown={(event) => {
-    if (!selectedColor) return;
+            onPointerDown={(event) => {
+                if (!selectedColor) return;
 
-    event.preventDefault();
-    startPainting(day);
-  }}
-  onDragStart={(event) => event.preventDefault()}
->
-    
+                event.preventDefault();
+                event.currentTarget.setPointerCapture(event.pointerId);
+
+                startPainting(day);
+            }}
+            onDragStart={(event) => event.preventDefault()}
+            >
+
             <span className="day-number">{day}</span>
 
             <div className="event-stripes">
