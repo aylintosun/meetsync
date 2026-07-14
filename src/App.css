@@ -564,6 +564,16 @@ textarea:disabled {
     0 5px 14px rgba(172, 160, 189, 0.18);
 }
 
+.clear-color-button {
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 @media (max-width: 760px) {
   .calendar-top,
   .setup-row {

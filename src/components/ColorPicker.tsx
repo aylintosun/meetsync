@@ -11,6 +11,18 @@ function ColorPicker({
 }: ColorPickerProps) {
   return (
     <div className="color-options">
+       <button
+    type="button"
+    className={`color-button clear-color-button ${
+      selectedColor === "" ? "selected" : ""
+    }`}
+    onClick={() => onColorSelect("")}
+    aria-label="Clear color selection"
+    title="Normal cursor"
+  >
+    ×
+  </button>
+  
       {colors.map((color) => (
         <button
           key={color}
