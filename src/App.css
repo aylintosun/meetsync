@@ -7,13 +7,7 @@ body {
   font-family: Arial, sans-serif;
   color: #2f3340;
 
-  background-image:
-    linear-gradient(
-      rgba(248, 248, 251, 0.82),
-      rgba(248, 248, 251, 0.82)
-    ),
-    url("/davies-designs-studio-G-6kwVnClsE-unsplash.jpg");
-
+  background-image:url("/davies-designs-studio-G-6kwVnClsE-unsplash.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -47,8 +41,8 @@ textarea {
 }
 
 .calendar-card {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
+  background: #ffffff;
+  backdrop-filter: none;
 }
 
 .calendar-top {
