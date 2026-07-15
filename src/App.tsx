@@ -161,6 +161,25 @@ function App() {
     return "";
   }
 
+  function getNotesForSelectedDay(day: number) {
+    const dateKey = getDateKey(day);
+    const colorsForDay = markedDays[dateKey] || [];
+
+    return colorsForDay.reduce<Record<string, string>>(
+      (connectedNotes, color) => {
+        const connectedNote = getConnectedNote(day, color);
+
+        if (connectedNote.trim() !== "") {
+          connectedNotes[color] = connectedNote;
+        }
+
+        return connectedNotes;
+      },
+      {},
+    );
+  }
+
+
     function handleOpenNotesPanel() {
       if (selectedDay === null) return;
 
@@ -391,7 +410,7 @@ return (
           availableColors={markedDays[getDateKey(selectedDay)] || []}
           selectedNoteColor={selectedNoteColor}
           note={note}
-          notesForDay={notes[getDateKey(selectedDay)] || {}}
+          notesForDay={getNotesForSelectedDay(selectedDay)}
           isEditingNote={isEditingNote}
           onNoteColorSelect={handleNoteColorSelect}
           onNoteChange={setNote}
