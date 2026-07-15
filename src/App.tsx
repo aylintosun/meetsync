@@ -193,6 +193,16 @@ function App() {
       setIsDetailsPanelOpen(true);
     }
 
+    function handleSelectDay(day: number) {
+      setSelectedDay(day);
+
+      // Önceki güne ait not durumunu temizle.
+      setNote("");
+      setSelectedNoteColor("");
+      setIsEditingNote(false);
+      setIsDetailsPanelOpen(false);
+    }
+
 type PaintAction = "add" | "remove";
 
 function handlePaintDay(day: number, action: PaintAction) {
@@ -398,7 +408,7 @@ return (
           currentMonth={currentMonth}
           selectedColor={selectedColor}
           selectedDay={selectedDay}
-          onSelectDay={setSelectedDay}
+          onSelectDay={handleSelectDay}
           onPaintDay={handlePaintDay}
         />
       </section>
